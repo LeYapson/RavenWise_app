@@ -55,6 +55,7 @@ export const ROUTES = {
   // Fonctionnalités principales
   COURSE_TRACKING: 'CourseTracking',
   QUIZ: 'Quiz',
+  QUIZ_LIST: 'QuizListScreen',
   QUIZ_DETAIL: 'QuizDetail',
   PROFILE: 'Profile',
   

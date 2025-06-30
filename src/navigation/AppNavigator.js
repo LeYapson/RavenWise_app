@@ -12,6 +12,8 @@ import ClerkLoginScreen from '../screens/auth/ClerkLoginScreen';
 import CourseTrackingScreen from '../screens/courses/CourseTrackingScreen';
 import QuizScreen from '../screens/lessons/QuizScreen';
 import ProfileScreen from '../screens/main/ProfileScreen';
+import QuizListScreen from '../screens/lessons/QuizListScreen';
+import QuizResultScreen from '../screens/lessons/QuizResultScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,7 +28,7 @@ const MainTabNavigator = () => {
 
           if (route.name === ROUTES.COURSE_TRACKING) {
             iconName = focused ? 'book' : 'book-outline';
-          } else if (route.name === ROUTES.QUIZ) {
+          } else if (route.name === ROUTES.QUIZ_LIST) {
             iconName = focused ? 'help-circle' : 'help-circle-outline';
           } else if (route.name === ROUTES.PROFILE) {
             iconName = focused ? 'person' : 'person-outline';
@@ -64,10 +66,10 @@ const MainTabNavigator = () => {
         options={{ title: 'Mes Cours' }}
       />
       <Tab.Screen 
-        name={ROUTES.QUIZ} 
-        component={QuizScreen}
+        name={ROUTES.QUIZ_LIST} 
+        component={QuizListScreen}
         options={{ title: 'Quiz' }}
-      />
+        />
       <Tab.Screen 
         name={ROUTES.PROFILE} 
         component={ProfileScreen}
@@ -100,16 +102,25 @@ const AppNavigator = () => {
       {isAuthenticated ? (
         // Navigation pour les utilisateurs connectés
         <>
-          <Stack.Screen 
-            name="MainTabs" 
-            component={MainTabNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen 
-            name={ROUTES.QUIZ_DETAIL} 
-            component={QuizScreen}
-            options={{ title: 'Quiz' }}
-          />
+            <Stack.Screen 
+                name="MainTabs" 
+                component={MainTabNavigator}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen 
+                name={ROUTES.QUIZ_DETAIL} 
+                component={QuizScreen}
+                options={{ title: 'Quiz' }}
+            />
+            <Stack.Screen 
+                name="QuizResult" 
+                component={QuizResultScreen}
+            />
+            <Stack.Screen 
+                name={ROUTES.QUIZ_LIST} 
+                component={QuizListScreen}
+                options={{ title: 'Quiz' }}
+            />
         </>
       ) : (
         // Écran de connexion Clerk

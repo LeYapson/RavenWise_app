@@ -13,6 +13,7 @@ import { notificationService } from '../../services/notificationService';
 import { useAuthContext } from '../../context/ClerkAuthContext';
 import { COLORS, ROUTES } from '../../constants';
 import { ProgressBar, LoadingSpinner } from '../../components';
+import { getUserCourses } from '../../services/api'
 
 // Données de démo pour le développement
 const getDemoCoursesData = () => [
@@ -72,35 +73,38 @@ const CourseTrackingScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchEnrolledCourses = async () => {
-    try {
-      if (!user?.id) {
-        console.warn('Utilisateur non connecté');
-        setCourses(getDemoCoursesData());
-        setLoading(false);
-        return;
-      }
-      
-      const response = await courseService.getUserCourses(user.id);
-      setCourses(response || []);
-    } catch (error) {
-      console.error('Erreur lors du chargement des cours:', error);
-      
-      // En cas d'erreur réseau, utiliser des données de démo
-      if (error.message === 'Network Error') {
-        console.log('🔧 Mode démo : Utilisation de données fictives');
-        setCourses(getDemoCoursesData());
-      } else {
-        Alert.alert('Erreur', 'Impossible de charger vos cours');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+    useEffect(() => {
+        const fetchEnrolledCourses = async () => {
+            try {
+                if (!user?.id) {
+                    console.warn('Utilisateur non connecté');
+                    setCourses(getDemoCoursesData());
+                    return;
+                }
+
+                const data = await getUserCourses(user.id);
+                setCourses(data || []);
+            } catch (error) {
+                console.error('Erreur lors du chargement des cours:', error);
+
+                if (error.message === 'Network Error') {
+                    console.log('🔧 Mode démo : Utilisation de données fictives');
+                    setCourses(getDemoCoursesData());
+                } else {
+                    Alert.alert('Erreur', 'Impossible de charger vos cours');
+                }
+            } finally {
+            setLoading(false);
+            }
+        };
+
+        fetchEnrolledCourses();
+    }, []);
+
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchEnrolledCourses();
+    // await fetchEnrolledCourses();
     setRefreshing(false);
   };
 
@@ -282,9 +286,9 @@ const CourseTrackingScreen = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    fetchEnrolledCourses();
-  }, []);
+//   useEffect(() => {
+//     fetchEnrolledCourses();
+//   }, []);
 
   if (loading) {
     return (
