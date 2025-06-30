@@ -116,11 +116,11 @@ const AppNavigator = () => {
                 name="QuizResult" 
                 component={QuizResultScreen}
             />
-            <Stack.Screen 
+            {/* <Stack.Screen 
                 name={ROUTES.QUIZ_LIST} 
                 component={QuizListScreen}
                 options={{ title: 'Quiz' }}
-            />
+            /> */}
         </>
       ) : (
         // Écran de connexion Clerk

@@ -12,11 +12,14 @@ export default function QuizResultScreen({ route, navigation }) {
         {score} / {total} bonnes réponses
       </Text>
 
+{/* navigation.navigate(ROUTES.QUIZ_LIST, { courseId }) */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate(ROUTES.QUIZ_LIST, { courseId })}
+        onPress={() => navigation.navigate('MainTabs', {screen: ROUTES.QUIZ_LIST, params: { courseId }})
+    
+    }
       >
-        <Text style={styles.buttonText}>Retour aux cours</Text>
+        <Text style={styles.buttonText}>Retour à la sélection de quiz</Text>
       </TouchableOpacity>
     </View>
   );

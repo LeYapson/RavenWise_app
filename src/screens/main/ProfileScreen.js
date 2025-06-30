@@ -18,6 +18,7 @@ import { COLORS, ROUTES } from '../../constants';
 const getDemoUserStats = () => ({
   totalCourses: 3,
   completedCourses: 1,
+  coursesEnrolled: 10,
   inProgressCourses: 2,
   totalLessons: 35,
   completedLessons: 19,
@@ -33,42 +34,42 @@ const getDemoUserStats = () => ({
 });
 
 const ProfileScreen = ({ navigation }) => {
-  const { userData, signOut, user } = useAuthContext();
-  const [userStats, setUserStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+    const { userData, signOut, user } = useAuthContext();
+    const [userStats, setUserStats] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
-  const fetchUserStats = async () => {
-    try {
-      if (!user?.id) {
-        console.warn('Utilisateur non connecté');
-        setUserStats(getDemoUserStats());
-        setLoading(false);
-        return;
-      }
-      
-      const response = await progressService.getUserProgress(user.id);
-      setUserStats(response);
-    } catch (error) {
-      console.error('Erreur lors du chargement des statistiques:', error);
-      
-      // En cas d'erreur réseau, utiliser des données de démo
-      console.log('🔧 Mode démo : Utilisation de statistiques fictives');
-      setUserStats(getDemoUserStats());
-      Alert.alert(
-        'Mode démo',
-        'Impossible de se connecter au serveur. Affichage des données de démonstration.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchUserStats = async () => {
+        try {
+            if (!user?.id) {
+                console.warn('Utilisateur non connecté');
+                setUserStats(getDemoUserStats());
+                setLoading(false);
+                return;
+            }
+            
+            const response = await progressService.getUserProgress(user.id);
+            setUserStats(response);
+        } catch (error) {
+            console.error('Erreur lors du chargement des statistiques:', error);
+            
+            // En cas d'erreur réseau, utiliser des données de démo
+            console.log('🔧 Mode démo : Utilisation de statistiques fictives');
+            setUserStats(getDemoUserStats());
+            Alert.alert(
+                'Mode démo',
+                'Impossible de se connecter au serveur. Affichage des données de démonstration.'
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchUserStats();
-    setRefreshing(false);
-  };
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await fetchUserStats();
+        setRefreshing(false);
+    };
 
   const handleLogout = () => {
     Alert.alert(
